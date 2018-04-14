@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<canvas id="myCanvas" width="500" height="500"
+        style="border:1px solid #000000;">
+</canvas>
+</body>
+<script>
+
+    (function () {
+        let c = document.getElementById("myCanvas");
+        let ctx = c.getContext("2d");
+        let x1 = 0;
+        let y1 = 250;
+        ctx.moveTo(x1, y1);
+        let katProsty = [
+            {distance: 5.661, degree: 1.145762838},
+            {distance: 16.4934, degree: -1.260303847},
+            {distance: 21.4506, degree: -0.515648093},
+            {distance: 22.185, degree: -0.973934437},
+            {distance: 28.7946, degree: -2.46220173},
+            {distance: 32.5278, degree: -0.401063906},
+            {distance: 37.1484, degree: 27.06703242},
+            {distance: 39.3822, degree: 41.60507646},
+            {distance: 35.4042, degree: 11.47511301},
+            {distance: 31.1508, degree: 0.05729576},
+            {distance: 31.6404, degree: 0.973934437},
+            {distance: 35.8938, degree: -3.890124404},
+            {distance: 4.3452, degree: -3.718993973},
+            {distance: 0.0306, degree: 0.05729576},
+        ];
+
+        let liniaProsta = [
+            {distance: 3.9168, degree: 3.1480961},
+            {distance: 32.6808, degree: -11.42007417},
+            {distance: 44.8596, degree: -21.55401992},
+            {distance: 39.1986, degree: -2.46220173},
+            {distance: 39.168, degree: 5.426812499},
+            {distance: 40.2696, degree: 2.290610043},
+            {distance: 48.0114, degree: -4.460040468},
+            {distance: 49.6026, degree: -5.085924089},
+            {distance: 38.6478, degree: -13.22455119},
+            {distance: 0.0612, degree: -0.114591406},
+
+        ];
+
+
+        let oldKatProsty = [
+            {distance: 3.1212, degree: 2.176192551},
+            {distance: 4.998, degree: 0.515648093},
+            {distance: 7.2114, degree: -1.546610294},
+            {distance: 9.0882, degree: -4.744674289},
+            {distance: 7.6806, degree: 5.256414941},
+            {distance: 9.0066, degree: -2.176192551},
+            {distance: 9.69, degree: 0.572938698},
+            {distance: 8.7924, degree: 1.718358002},
+            {distance: 10.6488, degree: -2.290610043},
+            {distance: 9.69, degree: 2.919555254},
+            {distance: 10.8324, degree: 8.810732986},
+            {distance: 10.659, degree: 36.39021468},
+            {distance: 7.7928, degree: 34.37212792},
+            {distance: 9.4656, degree: 8.64280258},
+            {distance: 9.7614, degree: 0.687516355},
+            {distance: 9.384, degree: -0.28647651},
+            {distance: 10.1184, degree: 0.28647651},
+            {distance: 0.9486, degree: -0.401063906},
+
+        ];
+
+
+        let lukSzybki = [
+            {distance: 0.0102, degree: -0.05729576},
+            {distance: 36.0672, degree: -17.22343619},
+            {distance: 44.2986, degree: -19.44303178},
+            {distance: 44.3802, degree: -14.5742162},
+            {distance: 43.2378, degree: -14.03624347},
+            {distance: 41.8404, degree: -19.34107331},
+        ];
+
+        let dtemp = 0;
+        for (let encoderData of lukSzybki) {
+            dtemp = dtemp + encoderData.degree;
+            let x2 = getX(x1, dtemp, encoderData.distance);
+            let y2 = getY(y1, dtemp, encoderData.distance);
+            ctx.lineTo(x2, y2);
+            x1 = x2;
+            y1 = y2;
+            ctx.stroke();
+        }
+
+
+    })();
+
+
+    //    x2 = x1 + r * degreeX;
+    //    y2 = y1 + r * degreeY;
+    //    ctx.moveTo(x1, y1);
+    //    ctx.lineTo(x2, y2);
+    //
+    //    x1 = x2;
+    //    y1 = y2;
+    //    degree = 0;
+    //    r = 150;
+    //    degreeX = Math.cos(Math.PI * degree / 180.0);
+    //    degreeY = Math.sin(Math.PI * degree / 180.0);
+    //    x2 = x1 + r * degreeX;
+    //    y2 = y1 + r * degreeY;
+    //    ctx.lineTo(x2, y2);
+    //
+    //
+    //
+    //
+    //    ctx.stroke();
+
+    function getX(oldX, degree, r) {
+        let degreeX = Math.cos(Math.PI * degree / 180.0);
+        return oldX + r * degreeX;
+    }
+
+    function getY(oldY, degree, r) {
+        let degreeY = Math.sin(Math.PI * degree / 180.0);
+        return oldY + r * degreeY;
+    }
+</script>
+</html>
