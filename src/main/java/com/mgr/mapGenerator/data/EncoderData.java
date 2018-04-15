@@ -25,4 +25,7 @@ public class EncoderData {
 
     @Column(name = "DISTANCE")
     private Double distance;
+
+    @Column(name = "RAW_DATA_ID")
+    private Long rawDataId;
 }

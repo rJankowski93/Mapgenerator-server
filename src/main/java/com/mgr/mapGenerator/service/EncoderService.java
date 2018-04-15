@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,9 +22,11 @@ public class EncoderService {
 
     public List<EncoderData> generateData() {
         List<EncoderData> encoderDataList = new ArrayList<>();
+        EncoderData lastEncoderData = encoderDataRepository.findFirstByOrderByIdDesc();
         List<EncoderRawData> encoderRawDataList = encoderRawDataRepository.findAll();
-        for (EncoderRawData rawData : encoderRawDataList) {
+        for (EncoderRawData rawData : encoderRawDataList.stream().filter(encoderRawData -> encoderRawData.getId()>lastEncoderData.getRawDataId()).collect(Collectors.toList())) {
             EncoderData encoderData = new EncoderData();
+            encoderData.setRawDataId(rawData.getId());
             Double differenceDistanceBetweenWheels = Double.valueOf(rawData.getLeft()) - Double.valueOf(rawData.getRight());
             Double degrees = Math.toDegrees(Math.atan(differenceDistanceBetweenWheels / Cache.distanceBetweenWheels));
             encoderData.setDegrees(degrees);

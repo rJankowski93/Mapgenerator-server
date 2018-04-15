@@ -16,13 +16,12 @@ public class MapController {
 
     private final EncoderService encoderService;
 
-    @RequestMapping(path = "/generateData", method = RequestMethod.GET, produces = "application/json")
-    public List<EncoderData> generateData() {
-        return encoderService.generateData();
+    @RequestMapping(path = "/generateData", method = RequestMethod.POST, produces = "application/json")
+    public void generateData() {
+        encoderService.generateData();
     }
 
-
-    @RequestMapping(path = "/generateMap", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(path = "/encoderData", method = RequestMethod.GET, produces = "application/json")
     public List<EncoderData> getEncoderData() {
         return encoderService.getAll();
     }

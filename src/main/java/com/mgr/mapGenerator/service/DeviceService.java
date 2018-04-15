@@ -29,6 +29,10 @@ public class DeviceService {
         return deviceRepository.findById(id).orElseThrow(Exception::new);
     }
 
+    public void remove(Long id) {
+        deviceRepository.deleteById(id);
+    }
+
     public List<Device> searchDevices() throws IOException, InterruptedException {
         discoveryListener.setScanFinished(false);
         LocalDevice.getLocalDevice().getDiscoveryAgent().startInquiry(DiscoveryAgent.GIAC, discoveryListener);

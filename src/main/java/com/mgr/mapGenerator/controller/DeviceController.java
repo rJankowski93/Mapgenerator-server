@@ -39,6 +39,11 @@ public class DeviceController {
         }
     }
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "application/json")
+    public void remove(@PathVariable Long id) {
+        deviceService.remove(id);
+    }
+
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public ResponseEntity<List<Device>> searchDevices() {
         try {
@@ -61,7 +66,7 @@ public class DeviceController {
         }
     }
 
-    @RequestMapping("connect/{deviceId}")
+    @RequestMapping(value = "connect/{deviceId}", method = RequestMethod.GET)
     public ResponseEntity connect(@PathVariable("deviceId") Long deviceId) {
         try {
             connectService.connect(deviceId);

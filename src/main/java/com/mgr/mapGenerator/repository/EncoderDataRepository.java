@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EncoderDataRepository extends JpaRepository<EncoderData, Long> {
+
+    EncoderData findFirstByOrderByIdDesc();
 }
