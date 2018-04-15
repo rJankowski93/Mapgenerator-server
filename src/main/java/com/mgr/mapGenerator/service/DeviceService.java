@@ -36,7 +36,7 @@ public class DeviceService {
         }
         List<Device> devices = new ArrayList<>();
         for (RemoteDevice remoteDevice : discoveryListener.getRemoteDevices()) {
-            devices.add(new Device(remoteDevice.getFriendlyName(false), URLUtil.createDeviceUrl(remoteDevice)));
+            devices.add(new Device(remoteDevice.getFriendlyName(false), remoteDevice.getBluetoothAddress(), URLUtil.createDeviceUrl(remoteDevice)));
         }
         return devices;
     }
@@ -48,7 +48,7 @@ public class DeviceService {
         }
         for (RemoteDevice remoteDevice : discoveryListener.getRemoteDevices()) {
             if (name.equals(remoteDevice.getFriendlyName(false))) {
-                return deviceRepository.save(new Device(remoteDevice.getFriendlyName(false), URLUtil.createDeviceUrl(remoteDevice)));
+                return deviceRepository.save(new Device(remoteDevice.getFriendlyName(false), remoteDevice.getBluetoothAddress(), URLUtil.createDeviceUrl(remoteDevice)));
             }
         }
         return null;

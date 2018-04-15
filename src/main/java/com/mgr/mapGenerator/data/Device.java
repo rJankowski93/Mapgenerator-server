@@ -26,8 +26,12 @@ public class Device {
     @Column(name = "URL")
     private String url;
 
-    public Device(String name, String url) {
+    @Column(name = "BT_ADDRESS")
+    private String btAddress;
+
+    public Device(String name, String btAddress, String url) {
         this.name = name;
         this.url = url;
+        this.btAddress = btAddress;
     }
 }

@@ -1,15 +1,14 @@
 package com.mgr.mapGenerator.controller;
 
+import com.mgr.mapGenerator.data.Cache;
 import com.mgr.mapGenerator.data.Device;
+import com.mgr.mapGenerator.service.ConnectService;
 import com.mgr.mapGenerator.service.DeviceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
@@ -22,6 +21,8 @@ import java.util.List;
 public class DeviceController {
 
     private final DeviceService deviceService;
+
+    private final ConnectService connectService;
 
     @RequestMapping(value = "/devices", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<Device>> getDevices() {
@@ -49,7 +50,7 @@ public class DeviceController {
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public ResponseEntity<Device> saveDevices(@RequestParam("name") String name, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<Device> saveDevices(@RequestBody String name, UriComponentsBuilder uriBuilder) {
         try {
             Device device = deviceService.saveDevice(name);
             URI uri = uriBuilder.path("/device/{id}").buildAndExpand(device.getId()).toUri();
@@ -60,4 +61,25 @@ public class DeviceController {
         }
     }
 
+    @RequestMapping("connect/{deviceId}")
+    public ResponseEntity connect(@PathVariable("deviceId") Long deviceId) {
+        try {
+            connectService.connect(deviceId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
+        }
+    }
+
+    @RequestMapping(value = "connect/saveData")
+    public ResponseEntity saveData() {
+        try {
+            connectService.getData(Cache.streamConnection);
+            return ResponseEntity.ok().build();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
+        }
+    }
 }
