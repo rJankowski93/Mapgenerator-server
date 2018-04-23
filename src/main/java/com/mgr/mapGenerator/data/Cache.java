@@ -1,9 +1,9 @@
 package com.mgr.mapGenerator.data;
 
-import javax.microedition.io.StreamConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Cache {
-    public static StreamConnection streamConnection;
-    public static Boolean isConnection = false;
+    public static ConnectedDeviceList connectedDeviceList = new ConnectedDeviceList();
     public static Double distanceBetweenWheels = 1000D;
 }

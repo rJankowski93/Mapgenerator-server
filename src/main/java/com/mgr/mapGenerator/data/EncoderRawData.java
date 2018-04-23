@@ -22,8 +22,12 @@ public class EncoderRawData {
     @Column(name = "RIGHT")
     private Long right;
 
-    public EncoderRawData(Long left, Long right) {
+    @Column(name = "DEVICE_NAME")
+    private String deviceName;
+
+    public EncoderRawData(Long left, Long right, String deviceName) {
         this.left = left;
         this.right = right;
+        this.deviceName = deviceName;
     }
 }

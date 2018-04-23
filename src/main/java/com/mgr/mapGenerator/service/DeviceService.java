@@ -1,6 +1,8 @@
 package com.mgr.mapGenerator.service;
 
 import com.mgr.mapGenerator.data.Device;
+import com.mgr.mapGenerator.exceptions.ApplicationException;
+import com.mgr.mapGenerator.exceptions.ApplicationExceptionCodes;
 import com.mgr.mapGenerator.repository.DeviceRepository;
 import com.mgr.mapGenerator.util.URLUtil;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +27,8 @@ public class DeviceService {
         return deviceRepository.findAll();
     }
 
-    public Device getDevice(Long id) throws Exception {
-        return deviceRepository.findById(id).orElseThrow(Exception::new);
+    public Device getDevice(Long id) throws ApplicationException {
+        return deviceRepository.findById(id).orElseThrow(() -> new ApplicationException(ApplicationExceptionCodes.DEVICE_NOT_FOUND));
     }
 
     public void remove(Long id) {

@@ -28,4 +28,8 @@ public class EncoderData {
 
     @Column(name = "RAW_DATA_ID")
     private Long rawDataId;
+
+    @Column(name = "DEVICE_NAME")
+    private String deviceName;
+
 }

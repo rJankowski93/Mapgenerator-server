@@ -24,9 +24,10 @@ public class EncoderService {
         List<EncoderData> encoderDataList = new ArrayList<>();
         EncoderData lastEncoderData = encoderDataRepository.findFirstByOrderByIdDesc();
         List<EncoderRawData> encoderRawDataList = encoderRawDataRepository.findAll();
-        for (EncoderRawData rawData : encoderRawDataList.stream().filter(encoderRawData -> encoderRawData.getId()>lastEncoderData.getRawDataId()).collect(Collectors.toList())) {
+        for (EncoderRawData rawData : encoderRawDataList.stream().filter(encoderRawData -> encoderRawData.getId()> (lastEncoderData!= null ? lastEncoderData.getRawDataId() : 0)).collect(Collectors.toList())) {
             EncoderData encoderData = new EncoderData();
             encoderData.setRawDataId(rawData.getId());
+            encoderData.setDeviceName(rawData.getDeviceName());
             Double differenceDistanceBetweenWheels = Double.valueOf(rawData.getLeft()) - Double.valueOf(rawData.getRight());
             Double degrees = Math.toDegrees(Math.atan(differenceDistanceBetweenWheels / Cache.distanceBetweenWheels));
             encoderData.setDegrees(degrees);
@@ -47,5 +48,14 @@ public class EncoderService {
     public List<EncoderData> getAll() {
         return encoderDataRepository.findAll();
     }
+
+    public List<EncoderData> getEncoderDataByDeviceName(String deviceName) {
+        return encoderDataRepository.findAllByDeviceName(deviceName);
+    }
+
+    public List<EncoderRawData> getEncoderRawDataByDeviceName(String deviceName) {
+        return encoderRawDataRepository.findAllByDeviceName(deviceName);
+    }
+
 
 }
