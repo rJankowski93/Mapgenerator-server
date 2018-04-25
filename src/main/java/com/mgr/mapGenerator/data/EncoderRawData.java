@@ -30,4 +30,9 @@ public class EncoderRawData {
         this.right = right;
         this.deviceName = deviceName;
     }
+
+
+    public Double calculateDifferenceDistanceBetweenWheels(){
+      return Double.valueOf(getLeft()) - Double.valueOf(getRight());
+    }
 }

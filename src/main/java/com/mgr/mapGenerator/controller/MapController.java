@@ -16,9 +16,10 @@ public class MapController {
 
     private final EncoderService encoderService;
 
-    @RequestMapping(path = "/generateData", method = RequestMethod.POST, produces = "application/json")
-    public void generateData() {
-        encoderService.generateData();
+    //TODO w kliencie zmienic zeby wysylal deviceName w POST i zmienic mapping na refreshData
+    @RequestMapping(path = "/refreshData", method = RequestMethod.POST, produces = "application/json")
+    public void refreshData(String deviceName) {
+        encoderService.refreshData(deviceName);
     }
 
     @RequestMapping(path = "/encoderData/{selectedDevice}", method = RequestMethod.GET)

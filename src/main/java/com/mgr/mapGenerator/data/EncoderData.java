@@ -32,4 +32,7 @@ public class EncoderData {
     @Column(name = "DEVICE_NAME")
     private String deviceName;
 
+    public EncoderData(Long id) {
+        this.id=id;
+    }
 }

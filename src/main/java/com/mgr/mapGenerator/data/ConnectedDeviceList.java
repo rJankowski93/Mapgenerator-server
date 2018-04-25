@@ -11,8 +11,9 @@ import java.util.stream.Collectors;
 public class ConnectedDeviceList {
     private List<ConnectedDevice> connectedDevices = new ArrayList<>();
 
+    //TODO distanceBetweenWhhels powinno przychodzic z frontu
     public void add(String deviceName, StreamConnection streamConnection) {
-        connectedDevices.add(new ConnectedDevice(deviceName, streamConnection));
+        connectedDevices.add(new ConnectedDevice(deviceName, streamConnection, 1000D));
     }
 
     public boolean isExist(String name) {

@@ -10,4 +10,5 @@ import javax.microedition.io.StreamConnection;
 public class ConnectedDevice {
     final private String deviceName;
     final private StreamConnection streamConnection;
+    final private Double distanceBetweenWheels;
 }

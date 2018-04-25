@@ -7,6 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MapGeneratorServerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MapGeneratorServerApplication.class, args);
+		 SpringApplication.run(MapGeneratorServerApplication.class, args);
 	}
 }

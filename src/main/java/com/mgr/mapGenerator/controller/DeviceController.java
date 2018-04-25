@@ -69,6 +69,7 @@ public class DeviceController {
         }
     }
 
+    //TODO zmienic na odpalenie w innym watku
     @RequestMapping(value = "connect/saveData")
     public ResponseEntity saveData(@PathVariable("name") String name) throws IOException, ApplicationException {
         connectService.getData(Cache.connectedDeviceList.get(name));
