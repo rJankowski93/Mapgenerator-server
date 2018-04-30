@@ -9,7 +9,9 @@ import com.mgr.mapGenerator.exceptions.ApplicationException;
 import com.mgr.mapGenerator.exceptions.ApplicationExceptionCodes;
 import com.mgr.mapGenerator.repository.DeviceRepository;
 import com.mgr.mapGenerator.repository.EncoderRawDataRepository;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
 
 import javax.microedition.io.Connector;
@@ -33,18 +35,16 @@ public class BluetoothService implements ConnectService {
 
     public void connect(Long deviceId) throws ApplicationException {
         try {
-            Optional<Device> device = deviceRepository.findById(deviceId);
-            if (device.isPresent()) {
-                Cache.connectedDeviceList.add(device.get().getName(), (StreamConnection) Connector.open(device.get().getUrl()));
-            } else {
-                throw new ApplicationException(ApplicationExceptionCodes.DEVICE_NOT_FOUND);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            Device device = deviceRepository
+                    .findById(deviceId)
+                    .orElseThrow(() -> new ApplicationException(ApplicationExceptionCodes.DEVICE_NOT_FOUND));
+            Cache.connectedDeviceList.add(device.getName(), (StreamConnection) Connector.open(device.getUrl()));
+        } catch (IOException e) {
             throw new ApplicationException(ApplicationExceptionCodes.CONNECTION_FAILED);
         }
     }
 
+    //TODO refactor InputStream
     public void getData(ConnectedDevice connectedDevice) {
         try (InputStream is = connectedDevice.getStreamConnection().openInputStream()) {
             long counter = 0;
@@ -59,26 +59,19 @@ public class BluetoothService implements ConnectService {
                 }
                 if (counter == 10) {
                     Cache.connectedDeviceList.remove(connectedDevice.getDeviceName());
-                    System.out.println("********************END******************");
                 }
-                if (data.toString().startsWith("LS-") && data.toString().endsWith("-RE")) {
+                // S-12-15-23-E  12(left motor), 15(right motor), 23(sensor)
+                if (data.toString().startsWith("S-") && data.toString().endsWith("-E")) {
                     counter = 0;
                     String[] parts = data.toString().split("-");
-                    List<Long> lista = new ArrayList<>();
-                    System.out.println(data.toString());
-                    for (String part : parts) {
-                        if (!part.contains("LS") && !part.contains("RE") && !part.contains("LE") && !part.contains("RS")) {
-                            lista.add(Long.valueOf(part));
-                        }
-                        if (lista.size() >= 2) {
-                            if (lista.get(0) > 0 || lista.get(1) > 0)
-                                encoderRawDataRepository.save(new EncoderRawData(lista.get(0), lista.get(1), connectedDevice.getDeviceName()));
-                            lista.clear();
-                        }
+                    Long leftMotor = Long.valueOf(parts[1]);
+                    Long rightMotor = Long.valueOf(parts[2]);
+                    Double sensor = Double.valueOf(parts[3]);
+                    if (leftMotor > 0 || rightMotor > 0) {
+                        encoderRawDataRepository.save(new EncoderRawData(leftMotor, rightMotor, sensor, connectedDevice.getDeviceName()));
                     }
-
-                    data = new StringBuilder();
                 }
+                data = new StringBuilder();
             }
         } catch (IOException e) {
             e.printStackTrace();

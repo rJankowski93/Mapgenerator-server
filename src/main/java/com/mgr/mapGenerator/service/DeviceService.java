@@ -1,5 +1,6 @@
 package com.mgr.mapGenerator.service;
 
+import com.mgr.mapGenerator.data.Cache;
 import com.mgr.mapGenerator.data.Device;
 import com.mgr.mapGenerator.exceptions.ApplicationException;
 import com.mgr.mapGenerator.exceptions.ApplicationExceptionCodes;
@@ -14,6 +15,7 @@ import javax.bluetooth.RemoteDevice;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +27,14 @@ public class DeviceService {
 
     public List<Device> getDevices() {
         return deviceRepository.findAll();
+    }
+
+    public List<String> getDeviceNames() {
+        return deviceRepository
+                .findAll()
+                .stream()
+                .map(Device::getName)
+                .collect(Collectors.toList());
     }
 
     public Device getDevice(Long id) throws ApplicationException {
@@ -40,24 +50,19 @@ public class DeviceService {
         LocalDevice.getLocalDevice().getDiscoveryAgent().startInquiry(DiscoveryAgent.GIAC, discoveryListener);
         while (!discoveryListener.isScanFinished()) {
         }
-        List<Device> devices = new ArrayList<>();
         for (RemoteDevice remoteDevice : discoveryListener.getRemoteDevices()) {
-            devices.add(new Device(remoteDevice.getFriendlyName(false), remoteDevice.getBluetoothAddress(), URLUtil.createDeviceUrl(remoteDevice)));
+            Cache.foundDeviceList.add(new Device(remoteDevice.getFriendlyName(false), remoteDevice.getBluetoothAddress(), URLUtil.createDeviceUrl(remoteDevice)));
         }
-        return devices;
+        return Cache.foundDeviceList;
     }
 
-    public Device saveDevice(String name) throws IOException {
-        discoveryListener.setScanFinished(false);
-        LocalDevice.getLocalDevice().getDiscoveryAgent().startInquiry(DiscoveryAgent.GIAC, discoveryListener);
-        while (!discoveryListener.isScanFinished()) {
-        }
-        for (RemoteDevice remoteDevice : discoveryListener.getRemoteDevices()) {
-            if (name.equals(remoteDevice.getFriendlyName(false))) {
-                return deviceRepository.save(new Device(remoteDevice.getFriendlyName(false), remoteDevice.getBluetoothAddress(), URLUtil.createDeviceUrl(remoteDevice)));
-            }
-        }
-        return null;
+    public Device saveDevice(String name) throws IOException, ApplicationException {
+        Device foundDevice = Cache.foundDeviceList
+                .stream()
+                .filter(device -> device.getName().equals(name))
+                .findFirst()
+                .orElseThrow(() -> new ApplicationException(ApplicationExceptionCodes.DEVICE_NOT_FOUND));
+        return deviceRepository.save(foundDevice);
     }
 
 }

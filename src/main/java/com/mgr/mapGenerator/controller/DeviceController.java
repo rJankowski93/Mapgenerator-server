@@ -53,10 +53,16 @@ public class DeviceController {
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public ResponseEntity<Device> saveDevices(@RequestBody String name, UriComponentsBuilder uriBuilder) throws IOException {
-        Device device = deviceService.saveDevice(name);
+    public ResponseEntity saveDevices(@RequestBody String name, UriComponentsBuilder uriBuilder) throws IOException {
+        Device device = null;
+        try {
+            device = deviceService.saveDevice(name);
+
         URI uri = uriBuilder.path("/device/{id}").buildAndExpand(device.getId()).toUri();
         return ResponseEntity.created(uri).build();
+        } catch (ApplicationException e) {
+            return new ResponseEntity<Object>(e.getMessage(), new HttpHeaders(), e.getHttpStatus());
+        }
     }
 
     @RequestMapping(value = "connect/{deviceId}", method = RequestMethod.GET)
@@ -69,7 +75,6 @@ public class DeviceController {
         }
     }
 
-    //TODO zmienic na odpalenie w innym watku
     @RequestMapping(value = "connect/saveData")
     public ResponseEntity saveData(@PathVariable("name") String name) throws IOException, ApplicationException {
         connectService.getData(Cache.connectedDeviceList.get(name));
@@ -80,4 +85,10 @@ public class DeviceController {
     public ResponseEntity getConnectedDevices() {
         return ResponseEntity.ok(Cache.connectedDeviceList.getDeviceNames());
     }
+
+    @RequestMapping(value = "/deviceNames", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity getDeviceNames() {
+        return ResponseEntity.ok(deviceService.getDeviceNames());
+    }
+
 }

@@ -26,6 +26,9 @@ public class EncoderData {
     @Column(name = "DISTANCE")
     private Double distance;
 
+    @Column(name = "SENSOR")
+    private Double sensor;
+
     @Column(name = "RAW_DATA_ID")
     private Long rawDataId;
 
@@ -33,6 +36,6 @@ public class EncoderData {
     private String deviceName;
 
     public EncoderData(Long id) {
-        this.id=id;
+        this.id = id;
     }
 }

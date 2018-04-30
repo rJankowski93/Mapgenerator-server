@@ -1,18 +1,15 @@
 package com.mgr.mapGenerator.service;
 
-import com.mgr.mapGenerator.data.Cache;
-import com.mgr.mapGenerator.data.Device;
-import com.mgr.mapGenerator.data.EncoderData;
-import com.mgr.mapGenerator.data.EncoderRawData;
+import com.mgr.mapGenerator.data.*;
+import com.mgr.mapGenerator.exceptions.ApplicationException;
 import com.mgr.mapGenerator.repository.DeviceRepository;
 import com.mgr.mapGenerator.repository.EncoderDataRepository;
 import com.mgr.mapGenerator.repository.EncoderRawDataRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,12 +19,10 @@ public class EncoderService {
 
     private final EncoderRawDataRepository encoderRawDataRepository;
 
-    private final DeviceRepository deviceRepository;
-
-    public void refreshData(String deviceName) {
-        //TODO sprawdzic
-        EncoderData lastEncoderData = encoderDataRepository.findFirstByDeviceNameAndOrderByIdDesc(deviceName).orElse(new EncoderData(0L));
+    public void refreshData(String deviceName) throws ApplicationException {
+        EncoderData lastEncoderData = encoderDataRepository.findFirstByDeviceNameOrderByIdDesc(deviceName).orElse(new EncoderData(0L));
         List<EncoderRawData> encoderRawDataList = encoderRawDataRepository.findAllByDeviceName(deviceName);
+        ConnectedDevice connectedDevice = Cache.connectedDeviceList.get(deviceName);
         encoderRawDataList
                 .stream()
                 .filter(encoderRawData -> encoderRawData.getId() > lastEncoderData.getRawDataId())
@@ -35,16 +30,17 @@ public class EncoderService {
                     EncoderData encoderData = new EncoderData();
                     encoderData.setRawDataId(encoderRawData.getId());
                     encoderData.setDeviceName(encoderRawData.getDeviceName());
-                    encoderData.setDegrees(calculateTurnDegree(encoderRawData,device));
+                    encoderData.setDegrees(calculateTurnDegree(encoderRawData, connectedDevice));
                     encoderData.setDistance(calculateDistance(encoderRawData));
+                    encoderData.setSensor(encoderRawData.getSensor());
                     encoderDataRepository.save(encoderData);
                 });
     }
 
-    private Double calculateTurnDegree(EncoderRawData encoderRawData) {
-        Double differenceDistanceBetweenWheels = encoderRawData.calculateDifferenceDistanceBetweenWheels();
-        //TODO pobrac z cache
-        return Math.toDegrees(Math.atan(differenceDistanceBetweenWheels / Cache.distanceBetweenWheels));
+    private Double calculateTurnDegree(EncoderRawData encoderRawData, ConnectedDevice connectedDevice) {
+        Double differenceTraveledDistance = encoderRawData.calculateDifferenceTraveledDistance();
+        Double distanceBetweenWheels = connectedDevice.getDistanceBetweenWheels();
+        return Math.toDegrees(Math.atan(differenceTraveledDistance / distanceBetweenWheels));
     }
 
     private Double calculateDistance(EncoderRawData encoderRawData) {

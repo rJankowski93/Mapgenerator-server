@@ -12,6 +12,4 @@ public interface ConnectService {
     void connect(Long deviceId) throws ApplicationException;
 
     void getData(ConnectedDevice connectedDevice) throws IOException;
-
-
 }

@@ -1,9 +1,12 @@
 package com.mgr.mapGenerator.controller;
 
 import com.mgr.mapGenerator.data.EncoderData;
+import com.mgr.mapGenerator.exceptions.ApplicationException;
 import com.mgr.mapGenerator.service.EncoderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -16,10 +19,14 @@ public class MapController {
 
     private final EncoderService encoderService;
 
-    //TODO w kliencie zmienic zeby wysylal deviceName w POST i zmienic mapping na refreshData
     @RequestMapping(path = "/refreshData", method = RequestMethod.POST, produces = "application/json")
-    public void refreshData(String deviceName) {
-        encoderService.refreshData(deviceName);
+    public ResponseEntity refreshData(String deviceName) {
+        try {
+            encoderService.refreshData(deviceName);
+            return ResponseEntity.ok().build();
+        } catch (ApplicationException e) {
+            return ResponseEntity.ok().build();
+        }
     }
 
     @RequestMapping(path = "/encoderData/{selectedDevice}", method = RequestMethod.GET)

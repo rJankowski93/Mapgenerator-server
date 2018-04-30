@@ -22,17 +22,21 @@ public class EncoderRawData {
     @Column(name = "RIGHT")
     private Long right;
 
+    @Column(name = "SENSOR")
+    private Double sensor;
+
     @Column(name = "DEVICE_NAME")
     private String deviceName;
 
-    public EncoderRawData(Long left, Long right, String deviceName) {
+    public EncoderRawData(Long left, Long right, Double sensor, String deviceName) {
         this.left = left;
         this.right = right;
+        this.sensor = sensor;
         this.deviceName = deviceName;
+
     }
 
-
-    public Double calculateDifferenceDistanceBetweenWheels(){
-      return Double.valueOf(getLeft()) - Double.valueOf(getRight());
+    public Double calculateDifferenceTraveledDistance() {
+        return Double.valueOf(getLeft()) - Double.valueOf(getRight());
     }
 }

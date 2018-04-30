@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface EncoderDataRepository extends JpaRepository<EncoderData, Long> {
 
-    Optional<EncoderData> findFirstByDeviceNameAndOrderByIdDesc(String deviceName);
+    Optional<EncoderData> findFirstByDeviceNameOrderByIdDesc(String deviceName);
 
     List<EncoderData> findAllByDeviceName(String deviceName);
 }
