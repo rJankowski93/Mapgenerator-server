@@ -19,7 +19,7 @@ public class ConnectedDeviceList {
     public boolean isExist(String name) {
         return connectedDevices
                 .stream()
-                .anyMatch(connectedDevice -> connectedDevice.equals(name));
+                .anyMatch(connectedDevice -> connectedDevice.getDeviceName().equals(name));
     }
 
     public void remove(String name) {

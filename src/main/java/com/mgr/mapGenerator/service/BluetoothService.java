@@ -19,10 +19,7 @@ import javax.microedition.io.StreamConnection;
 import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -50,14 +47,11 @@ public class BluetoothService implements ConnectService {
             long counter = 0;
             byte[] temp = new byte[100];
             StringBuilder data = new StringBuilder();
-            while (!Cache.connectedDeviceList.isExist(connectedDevice.getDeviceName())) {
+            while (Cache.connectedDeviceList.isExist(connectedDevice.getDeviceName())) {
                 is.read(temp);
                 data.append(new String(temp).trim());
                 Arrays.fill(temp, (byte) 0);
-                if (data.length() == 0) {
-                    counter++;
-                }
-                if (counter == 10) {
+                if (counter == 100) {
                     Cache.connectedDeviceList.remove(connectedDevice.getDeviceName());
                 }
                 // S-12-15-23-E  12(left motor), 15(right motor), 23(sensor)
@@ -70,8 +64,11 @@ public class BluetoothService implements ConnectService {
                     if (leftMotor > 0 || rightMotor > 0) {
                         encoderRawDataRepository.save(new EncoderRawData(leftMotor, rightMotor, sensor, connectedDevice.getDeviceName()));
                     }
+                    data = new StringBuilder();
                 }
-                data = new StringBuilder();
+                else{
+                    counter++;
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

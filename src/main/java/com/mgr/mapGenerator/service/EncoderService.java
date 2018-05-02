@@ -19,10 +19,12 @@ public class EncoderService {
 
     private final EncoderRawDataRepository encoderRawDataRepository;
 
+    private final DeviceRepository deviceRepository;
+
     public void refreshData(String deviceName) throws ApplicationException {
-        EncoderData lastEncoderData = encoderDataRepository.findFirstByDeviceNameOrderByIdDesc(deviceName).orElse(new EncoderData(0L));
+        EncoderData lastEncoderData = encoderDataRepository.findFirstByDeviceNameOrderByIdDesc(deviceName).orElse(new EncoderData(0L,0L));
         List<EncoderRawData> encoderRawDataList = encoderRawDataRepository.findAllByDeviceName(deviceName);
-        ConnectedDevice connectedDevice = Cache.connectedDeviceList.get(deviceName);
+        Device selectedDevice = deviceRepository.findByName(deviceName);
         encoderRawDataList
                 .stream()
                 .filter(encoderRawData -> encoderRawData.getId() > lastEncoderData.getRawDataId())
@@ -30,16 +32,16 @@ public class EncoderService {
                     EncoderData encoderData = new EncoderData();
                     encoderData.setRawDataId(encoderRawData.getId());
                     encoderData.setDeviceName(encoderRawData.getDeviceName());
-                    encoderData.setDegrees(calculateTurnDegree(encoderRawData, connectedDevice));
+                    encoderData.setDegrees(calculateTurnDegree(encoderRawData, selectedDevice));
                     encoderData.setDistance(calculateDistance(encoderRawData));
                     encoderData.setSensor(encoderRawData.getSensor());
                     encoderDataRepository.save(encoderData);
                 });
     }
 
-    private Double calculateTurnDegree(EncoderRawData encoderRawData, ConnectedDevice connectedDevice) {
+    private Double calculateTurnDegree(EncoderRawData encoderRawData, Device selectedDevice) {
         Double differenceTraveledDistance = encoderRawData.calculateDifferenceTraveledDistance();
-        Double distanceBetweenWheels = connectedDevice.getDistanceBetweenWheels();
+        Double distanceBetweenWheels = selectedDevice.getDistanceBetweenWheels();
         return Math.toDegrees(Math.atan(differenceTraveledDistance / distanceBetweenWheels));
     }
 

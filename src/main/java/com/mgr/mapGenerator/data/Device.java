@@ -29,6 +29,9 @@ public class Device {
     @Column(name = "BT_ADDRESS")
     private String btAddress;
 
+    @Column(name = "DISTANCE_BETWEEN_WHEELS")
+    private Double distanceBetweenWheels;
+
     public Device(String name, String btAddress, String url) {
         this.name = name;
         this.url = url;

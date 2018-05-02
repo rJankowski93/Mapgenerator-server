@@ -35,7 +35,8 @@ public class EncoderData {
     @Column(name = "DEVICE_NAME")
     private String deviceName;
 
-    public EncoderData(Long id) {
+    public EncoderData(Long id, Long rawDataId) {
         this.id = id;
+        this.rawDataId = rawDataId;
     }
 }

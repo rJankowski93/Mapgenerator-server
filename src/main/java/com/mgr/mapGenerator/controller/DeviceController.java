@@ -75,9 +75,18 @@ public class DeviceController {
         }
     }
 
-    @RequestMapping(value = "connect/saveData")
-    public ResponseEntity saveData(@PathVariable("name") String name) throws IOException, ApplicationException {
-        connectService.getData(Cache.connectedDeviceList.get(name));
+    @RequestMapping(value = "connect/saveData/{deviceId}", method = RequestMethod.GET)
+    public ResponseEntity saveData(@PathVariable("deviceId") Long deviceId) throws IOException, ApplicationException {
+        Device device = deviceService.getDevice(deviceId);
+        new Thread(() -> {
+            try {
+                connectService.getData(Cache.connectedDeviceList.get(device.getName()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ApplicationException e) {
+                e.printStackTrace();
+            }
+        }).start();
         return ResponseEntity.ok().build();
     }
 
