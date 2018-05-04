@@ -38,4 +38,6 @@ dependencies {
 	compileOnly('org.projectlombok:lombok')
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '1.7.4'
+
 }

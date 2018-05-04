@@ -28,12 +28,19 @@ public class EncoderRawData {
     @Column(name = "DEVICE_NAME")
     private String deviceName;
 
+    public EncoderRawData(Long id, Long left, Long right, Double sensor, String deviceName) {
+        this.id = id;
+        this.left = left;
+        this.right = right;
+        this.sensor = sensor;
+        this.deviceName = deviceName;
+    }
+
     public EncoderRawData(Long left, Long right, Double sensor, String deviceName) {
         this.left = left;
         this.right = right;
         this.sensor = sensor;
         this.deviceName = deviceName;
-
     }
 
     public Double calculateDifferenceTraveledDistance() {

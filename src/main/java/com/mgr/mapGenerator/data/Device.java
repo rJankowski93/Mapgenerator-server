@@ -32,9 +32,17 @@ public class Device {
     @Column(name = "DISTANCE_BETWEEN_WHEELS")
     private Double distanceBetweenWheels;
 
+    public Device(String name) {
+        this.name = name;
+    }
+
     public Device(String name, String btAddress, String url) {
         this.name = name;
         this.url = url;
         this.btAddress = btAddress;
+    }
+
+    public Device(Double distanceBetweenWheels) {
+        this.distanceBetweenWheels = distanceBetweenWheels;
     }
 }

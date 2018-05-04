@@ -42,6 +42,7 @@ public class BluetoothService implements ConnectService {
     }
 
     //TODO refactor InputStream
+    //TODO add UnitTest
     public void getData(ConnectedDevice connectedDevice) {
         try (InputStream is = connectedDevice.getStreamConnection().openInputStream()) {
             long counter = 0;

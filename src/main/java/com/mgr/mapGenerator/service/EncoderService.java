@@ -21,8 +21,8 @@ public class EncoderService {
 
     private final DeviceRepository deviceRepository;
 
-    public void refreshData(String deviceName) throws ApplicationException {
-        EncoderData lastEncoderData = encoderDataRepository.findFirstByDeviceNameOrderByIdDesc(deviceName).orElse(new EncoderData(0L,0L));
+    public void refreshData(String deviceName) {
+        EncoderData lastEncoderData = encoderDataRepository.findFirstByDeviceNameOrderByIdDesc(deviceName).orElse(new EncoderData(0L, 0L));
         List<EncoderRawData> encoderRawDataList = encoderRawDataRepository.findAllByDeviceName(deviceName);
         Device selectedDevice = deviceRepository.findByName(deviceName);
         encoderRawDataList

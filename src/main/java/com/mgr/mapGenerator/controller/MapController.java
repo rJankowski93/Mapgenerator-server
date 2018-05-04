@@ -21,12 +21,8 @@ public class MapController {
 
     @RequestMapping(path = "/refreshData", method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity refreshData(String deviceName) {
-        try {
-            encoderService.refreshData(deviceName);
-            return ResponseEntity.ok().build();
-        } catch (ApplicationException e) {
-            return ResponseEntity.ok().build();
-        }
+        encoderService.refreshData(deviceName);
+        return ResponseEntity.ok().build();
     }
 
     @RequestMapping(path = "/encoderData/{selectedDevice}", method = RequestMethod.GET)
