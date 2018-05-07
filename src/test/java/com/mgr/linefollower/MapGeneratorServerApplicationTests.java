@@ -21,38 +21,38 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(classes = MapGeneratorServerApplication.class)
 public class MapGeneratorServerApplicationTests {
 
-	@Autowired
-	private ConnectService connectService;
-	@Autowired
-	private DeviceService deviceService;
-	@Autowired
-	private EncoderService encoderService;
+    @Autowired
+    private ConnectService connectService;
+    @Autowired
+    private DeviceService deviceService;
+    @Autowired
+    private EncoderService encoderService;
 
-	@Autowired
-	private DeviceController deviceController;
-	@Autowired
-	private MapController mapController;
+    @Autowired
+    private DeviceController deviceController;
+    @Autowired
+    private MapController mapController;
 
-	@Autowired
-	private DeviceRepository deviceRepository;
-	@Autowired
-	private EncoderDataRepository encoderDataRepository;
-	@Autowired
-	private EncoderRawDataRepository encoderRawDataRepository;
+    @Autowired
+    private DeviceRepository deviceRepository;
+    @Autowired
+    private EncoderDataRepository encoderDataRepository;
+    @Autowired
+    private EncoderRawDataRepository encoderRawDataRepository;
 
-	@Test
-	public void contextLoads() {
-		assertThat(connectService).isNotNull();
-		assertThat(deviceService).isNotNull();
-		assertThat(encoderService).isNotNull();
+    @Test
+    public void contextLoads() {
+        assertThat(connectService).isNotNull();
+        assertThat(deviceService).isNotNull();
+        assertThat(encoderService).isNotNull();
 
-		assertThat(deviceController).isNotNull();
-		assertThat(mapController).isNotNull();
+        assertThat(deviceController).isNotNull();
+        assertThat(mapController).isNotNull();
 
-		assertThat(deviceRepository).isNotNull();
-		assertThat(encoderDataRepository).isNotNull();
-		assertThat(encoderRawDataRepository).isNotNull();
-	}
+        assertThat(deviceRepository).isNotNull();
+        assertThat(encoderDataRepository).isNotNull();
+        assertThat(encoderRawDataRepository).isNotNull();
+    }
 
 
 }

@@ -46,23 +46,29 @@ public class EncoderServiceTest {
 
     @Test
     public void testRefreshDataWhenEncoderRawDataListIsEmpty() {
+        //given
         Mockito.when(encoderRawDataRepository.findAllByDeviceName(any())).thenReturn(new ArrayList<>());
 
+        //when
         encoderService.refreshData("Test");
 
+        //then
         Mockito.verify(encoderDataRepository, times(0)).save(any());
     }
 
     @Test
     public void testRefreshDataWhenEncoderRawDataListContains3Elements() {
+        //given
         EncoderRawData encoderRawData1 = new EncoderRawData(1L, 0L, 0L, 0D, "");
         EncoderRawData encoderRawData2 = new EncoderRawData(1L, 0L, 0L, 0D, "");
         EncoderRawData encoderRawData3 = new EncoderRawData(1L, 0L, 0L, 0D, "");
 
         Mockito.when(encoderRawDataRepository.findAllByDeviceName(any())).thenReturn(Arrays.asList(encoderRawData1, encoderRawData2, encoderRawData3));
 
+        //when
         encoderService.refreshData("Test");
 
+        //then
         Mockito.verify(encoderDataRepository, times(3)).save(any());
     }
 

@@ -1,5 +1,6 @@
 package com.mgr.mapGenerator.service;
 
+import com.mgr.mapGenerator.data.Cache;
 import com.mgr.mapGenerator.data.Device;
 import com.mgr.mapGenerator.exceptions.ApplicationException;
 import com.mgr.mapGenerator.repository.DeviceRepository;
@@ -10,7 +11,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.io.IOException;
+import javax.microedition.io.StreamConnection;
+import java.io.*;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -37,43 +39,4 @@ public class BluetoothServiceTest {
         bluetoothService.connect(0L);
     }
 
-//    @Test
-//    public void shouldReturn() throws IOException {
-//        Mockito.when(connectedDevice.getStreamConnection()).thenReturn(createStreamConnection());
-//        Mockito.when(connectedDevice.getDeviceName()).thenReturn("TEST DEVICE");
-//        Mockito.doCallRealMethod().when(bluetoothService).getData(connectedDevice);
-//        Cache.connectedDeviceList.add("TEST DEVICE", null);
-////        Mockito.when(ioUtils.toString(Mockito.anyObject(), "UTF-8")).thenReturn("ABC");
-//
-//        bluetoothService.getData(connectedDevice);
-//    }
-
-//    private StreamConnection createStreamConnection() {
-//        return new StreamConnection() {
-//            @Override
-//            public InputStream openInputStream() throws IOException {
-//                return inputStream;
-//            }
-//
-//            @Override
-//            public DataInputStream openDataInputStream() throws IOException {
-//                return null;
-//            }
-//
-//            @Override
-//            public OutputStream openOutputStream() throws IOException {
-//                return null;
-//            }
-//
-//            @Override
-//            public DataOutputStream openDataOutputStream() throws IOException {
-//                return null;
-//            }
-//
-//            @Override
-//            public void close() throws IOException {
-//
-//            }
-//        };
-//    }
 }

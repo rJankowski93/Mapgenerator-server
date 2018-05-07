@@ -30,18 +30,22 @@ public class DeviceServiceTest {
 
     @Test
     public void testGetDeviceNamesWhenListContains3Elements() {
+        //given
         Device device1 = new Device("First");
         Device device2 = new Device("Second");
         Device device3 = new Device("Third");
         Mockito.when(deviceRepository.findAll()).thenReturn(Arrays.asList(device1, device2, device3));
 
+        //then
         assertThat(deviceService.getDeviceNames(), CoreMatchers.hasItems("First", "Second", "Third"));
     }
 
     @Test(expected = ApplicationException.class)
     public void testGetDeviceWhenDeviceNotExist() throws ApplicationException {
+        //given
         Mockito.when(deviceRepository.findById(any())).thenReturn(Optional.empty());
 
+        //then
         deviceService.getDevice(1L);
     }
 

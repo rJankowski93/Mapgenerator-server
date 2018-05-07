@@ -43,7 +43,7 @@ public class BluetoothService implements ConnectService {
 
     //TODO refactor InputStream
     //TODO add UnitTest
-    public void getData(ConnectedDevice connectedDevice) {
+    public void getData(ConnectedDevice connectedDevice) throws ApplicationException {
         try (InputStream is = connectedDevice.getStreamConnection().openInputStream()) {
             long counter = 0;
             byte[] temp = new byte[100];
@@ -66,13 +66,12 @@ public class BluetoothService implements ConnectService {
                         encoderRawDataRepository.save(new EncoderRawData(leftMotor, rightMotor, sensor, connectedDevice.getDeviceName()));
                     }
                     data = new StringBuilder();
-                }
-                else{
+                } else {
                     counter++;
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ApplicationException(ApplicationExceptionCodes.CONNECTION_FAILED);
         }
     }
 
